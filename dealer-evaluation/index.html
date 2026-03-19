@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head><title>Dealer Evaluation</title></head>
+<body>
+    <h1>Dealer Evaluation Dashboard</h1>
+    <select id="prodDrop" onchange="loadDealers()"><option>Loading...</option></select>
+    <div id="dealers"></div>
+    <script>
+        const PROD_URL = "REPLACE_THIS_LATER";
+        const DEAL_URL = "REPLACE_THIS_LATER";
+
+        async function init() {
+            const res = await fetch(PROD_URL);
+            const data = await res.json();
+            const drop = document.getElementById('prodDrop');
+            drop.innerHTML = '<option value="">Select a Product</option>';
+            data.forEach(p => drop.innerHTML += `<option value="${p.id}">${p.name}</option>`);
+        }
+        async function loadDealers() {
+            const id = document.getElementById('prodDrop').value;
+            const res = await fetch(`${DEAL_URL}/${id}`);
+            const data = await res.json();
+            document.getElementById('dealers').innerHTML = data.map(d => `<p>${d.dealerName}: $${d.price}</p>`).join('');
+        }
+        window.onload = init;
+    </script>
+</body>
+</html>
